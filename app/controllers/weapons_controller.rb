@@ -5,13 +5,26 @@ class WeaponsController < ApplicationController
 
   def create
     @weapon = Weapon.create(weapon_params)
-    redirect_to weapons_index_path
+
+    if @weapon.save
+      flash[:notice] = 'Nova arma salva com sucesso'
+      redirect_to weapons_index_path
+    else
+      flash[:notice] = 'Houve um erro ao salvar a arma'
+      redirect_to weapons_create_path
+    end
+
   end
 
-  def delete
+  def destroy
+    @weapon = Weapon.find(params[:id])
+    @weapon.destroy
+    head :no_content
   end
 
   def show
+    @weapon = Weapon.find(params[:id])
+    redirect_to weapons_show_path(@weapon)
   end
 
   private
